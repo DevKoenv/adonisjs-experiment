@@ -1,0 +1,23 @@
+{
+  "name": "Node.js & TypeScript",
+
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oven.bun-vscode",
+        "jripouteau.adonis-vscode-extension",
+        "AdonisJS.vscode-edge",
+        "jripouteau.japa-vscode",
+        "mikestead.dotenv",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
