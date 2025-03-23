@@ -1,5 +1,7 @@
 @import 'tailwindcss';
-@source "../views";
+@source "../layouts";
+@source "../pages";
+@source "../components";
 
 @theme {
   --font-sans: Instrument Sans, sans-serif;
