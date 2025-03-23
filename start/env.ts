@@ -18,6 +18,13 @@ export default await Env.create(new URL('../', import.meta.url), {
   HOST: Env.schema.string({ format: 'host' }),
   LOG_LEVEL: Env.schema.string(),
 
+  DB_CONNECTION: Env.schema.enum(['sqlite', 'mysql', 'mssql'] as const),
+  DB_DATABASE: Env.schema.string(),
+  DB_HOST: Env.schema.string.optional({ format: 'host' }),
+  DB_PORT: Env.schema.number.optional(),
+  DB_USERNAME: Env.schema.string.optional(),
+  DB_PASSWORD: Env.schema.string.optional(),
+
   /*
   |----------------------------------------------------------
   | Variables for configuring session package
