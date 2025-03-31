@@ -10,22 +10,17 @@
     </title>
 
     <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link
-      href="https://fonts.bunny.net/css?family=instrument-sans:400,400i,500,500i,600,600i,700,700i"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
-    <script defer src="https://unpkg.com/ziggy-js@0.9.x/dist/js/route.min.js">
-      
-    </script>
+  </script>
 
-    @vite(['inertia/app/app.ts', 'inertia/css/app.css', `inertia/pages/${page.component}.vue`])
-    @inertiaHead()
-    @stack('dumper')
-  </head>
+  @vite(['inertia/app/app.ts', 'inertia/css/app.css', `inertia/pages/${page.component}.vue`])
+  @inertiaHead()
+  @stack('dumper')
+</head>
 
-  <body class="min-h-screen w-screen font-sans">
-    @inertia()
-  </body>
+<body class="min-h-screen w-screen font-sans">
+  @inertia()
+</body>
 
 </html>

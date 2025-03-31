@@ -185,8 +185,6 @@ export class UrlBuilder {
   public make(identifier: string): string {
     const pattern = this.findRouteOrFail(identifier)
     const url = this.processPattern(pattern)
-    return this.suffixQueryString(
-      this.baseUrl ? `${this.baseUrl}/${url}`.replace(/\/+/g, '/') : url
-    )
+    return this.suffixQueryString(this.baseUrl ? `${this.baseUrl}/${url}`.replace(/\/+/g, '/') : url)
   }
 }

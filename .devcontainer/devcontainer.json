@@ -16,7 +16,8 @@
         "jripouteau.japa-vscode",
         "mikestead.dotenv",
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "Vue.volar"
       ]
     }
   }

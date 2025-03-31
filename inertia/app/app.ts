@@ -22,11 +22,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
  * @param options Make url options
  * @returns Full path with params
  */
-export function createRoute(
-  routeName: string,
-  params?: Record<string, any> | any[],
-  options?: RouteOptions
-): string {
+export function createRoute(routeName: string, params?: Record<string, any> | any[], options?: RouteOptions): string {
   return new UrlBuilder(window.routes as any)
     .params(params)
     .qs(options?.qs)
@@ -40,10 +36,7 @@ createInertiaApp({
   title: (title: string) => `${title} - ${appName}`,
 
   resolve: (name: string) => {
-    return resolvePageComponent(
-      `../pages/${name}.vue`,
-      import.meta.glob<DefineComponent>('../pages/**/*.vue')
-    )
+    return resolvePageComponent(`../pages/${name}.vue`, import.meta.glob<DefineComponent>('../pages/**/*.vue'))
   },
 
   setup({ el, App, props, plugin }) {

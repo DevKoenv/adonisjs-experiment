@@ -47,20 +47,9 @@ import { Head } from '@inertiajs/vue3'
             <rect width="95" height="6" x="24" y="44" fill="#DAD9D6" rx="2" />
             <rect width="16" height="5" x="24" y="60" fill="#21201C" rx="1" />
             <path fill="#DAD9D6" d="M24 85a4 4 0 0 1 4-4h184a4 4 0 0 1 4 4v20H24V85Z" />
-            <path
-              fill="url(#b)"
-              fill-opacity=".2"
-              d="M24 85a4 4 0 0 1 4-4h184a4 4 0 0 1 4 4v20H24V85Z"
-            />
+            <path fill="url(#b)" fill-opacity=".2" d="M24 85a4 4 0 0 1 4-4h184a4 4 0 0 1 4 4v20H24V85Z" />
             <defs>
-              <linearGradient
-                id="b"
-                x1="120"
-                x2="120"
-                y1="81"
-                y2="105"
-                gradientUnits="userSpaceOnUse"
-              >
+              <linearGradient id="b" x1="120" x2="120" y1="81" y2="105" gradientUnits="userSpaceOnUse">
                 <stop stop-opacity="0" />
                 <stop offset="1" stop-color="#82827C" />
               </linearGradient>
@@ -70,9 +59,7 @@ import { Head } from '@inertiajs/vue3'
             </defs>
           </svg>
 
-          <div
-            class="absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-b from-white/0 to-white"
-          ></div>
+          <div class="absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-b from-white/0 to-white"></div>
         </div>
 
         <div class="flex flex-row gap-4">
@@ -93,13 +80,11 @@ import { Head } from '@inertiajs/vue3'
               </a>
             </h2>
 
-            <p
-              class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700"
-            >
-              Dive into the official documentation to learn AdonisJS. Read carefully to discover an
-              unmatched set of features, best practices and developer experience. Through examples,
-              guides and API references, you'll find everything you need to build your next project.
-              From installation to deployment, we've got you covered.
+            <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+              Dive into the official documentation to learn AdonisJS. Read carefully to discover an unmatched set of
+              features, best practices and developer experience. Through examples, guides and API references, you'll
+              find everything you need to build your next project. From installation to deployment, we've got you
+              covered.
             </p>
           </div>
         </div>
@@ -125,11 +110,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700"
-          >
-            Level up your development and Adonis skills with hours of video content, from beginner
-            to advanced, through databases, testing, and more.
+          <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+            Level up your development and Adonis skills with hours of video content, from beginner to advanced, through
+            databases, testing, and more.
           </p>
         </div>
       </article>
@@ -154,11 +137,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700"
-          >
-            Supercharge your AdonisJS application with packages built and maintained by both the
-            core team and the community.
+          <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+            Supercharge your AdonisJS application with packages built and maintained by both the core team and the
+            community.
           </p>
         </div>
       </article>
@@ -183,11 +164,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700"
-          >
-            Never get lost again, ask questions, and share your knowledge or projects with a growing
-            and supportive community. Join us.
+          <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+            Never get lost again, ask questions, and share your knowledge or projects with a growing and supportive
+            community. Join us.
           </p>
         </div>
       </article>
@@ -203,13 +182,7 @@ import { Head } from '@inertiajs/vue3'
             <a href="https://lucid.adonisjs.com" target="_blank" class="flex flex-row gap-2">
               <span class="bg-[#D5EAE7] h-6 w-6 flex justify-center items-center rounded">
                 <svg class="h-4 w-4 fill-[#0E766E]" viewBox="0 0 24 24">
-                  <g
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  >
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                     <path d="M4 6a8 3 0 1 0 16 0A8 3 0 1 0 4 6" />
                     <path d="M4 6v6a8 3 0 0 0 16 0V6" />
                     <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
@@ -221,11 +194,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100"
-          >
-            A SQL ORM with a powerful query builder, active record, migrations, and model factories.
-            Everything you need to work with databases.
+          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+            A SQL ORM with a powerful query builder, active record, migrations, and model factories. Everything you need
+            to work with databases.
           </p>
 
           <svg
@@ -265,11 +236,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100"
-          >
-            A yet simple but feature rich and type-safe form data validation. It comes with 50+
-            built-in rules and an expressive API to define custom rules.
+          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+            A yet simple but feature rich and type-safe form data validation. It comes with 50+ built-in rules and an
+            expressive API to define custom rules.
           </p>
 
           <svg
@@ -309,11 +278,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100"
-          >
-            The modern monolithic application architecture. It allows you to build single-page
-            applications without building an API.
+          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+            The modern monolithic application architecture. It allows you to build single-page applications without
+            building an API.
           </p>
 
           <svg
@@ -349,11 +316,9 @@ import { Head } from '@inertiajs/vue3'
             </a>
           </h2>
 
-          <p
-            class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100"
-          >
-            From JSON API tests using Open API schema to browser tests with Playwrighht, it comes
-            with everything you need to test your application.
+          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+            From JSON API tests using Open API schema to browser tests with Playwright, it comes with everything you
+            need to test your application.
           </p>
 
           <svg

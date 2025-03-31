@@ -1,0 +1,13 @@
+{
+  "semi": false,
+  "useTabs": false,
+  "quoteProps": "consistent",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "singleQuote": true,
+  "printWidth": 120,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "endOfLine": "lf",
+  "plugins": ["prettier-plugin-edgejs"]
+}
