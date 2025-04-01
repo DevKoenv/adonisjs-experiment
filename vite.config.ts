@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 import adonisjs from '@adonisjs/vite/client'
 import inertia from '@adonisjs/inertia/client'
 import vue from '@vitejs/plugin-vue'
+import path from 'node:path'
 
 export default defineConfig({
   plugins: [
@@ -10,8 +11,19 @@ export default defineConfig({
     inertia({ ssr: { enabled: false } }),
     vue(),
     adonisjs({
-      entrypoints: ['inertia/app/app.ts'],
-      reload: ['resources/views/**/*.edge', 'inertia/**/*.vue', 'inertia/**/*.ts'],
+      entrypoints: ['inertia/assets/js/app.ts'],
+      reload: [
+        'resources/views/**/*.edge',
+        'inertia/**/*.vue',
+        'inertia/**/*.ts',
+        'inertia/**/*.js',
+        'resources/**/*.css',
+      ],
     }),
   ],
+  resolve: {
+    alias: {
+      '@': path.resolve(import.meta.dirname, 'inertia'),
+    },
+  },
 })

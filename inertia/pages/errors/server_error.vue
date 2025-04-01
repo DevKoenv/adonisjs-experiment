@@ -1,7 +1,3 @@
-<script setup lang="ts">
-defineProps<{ error: any }>()
-</script>
-
 <template>
   <div class="container">
     <div class="title">Server Error</div>
@@ -9,3 +5,7 @@ defineProps<{ error: any }>()
     <span>{{ error.message }}</span>
   </div>
 </template>
+
+<script setup lang="ts">
+defineProps<{ error: any }>()
+</script>

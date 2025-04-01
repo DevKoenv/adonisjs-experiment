@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
-</script>
-
 <template>
   <Head title="Homepage" />
 
@@ -13,7 +9,6 @@ import { Head } from '@inertiajs/vue3'
     <!-- Header -->
     <div class="grow pb-4 bg-gradient-to-b from-sand-1 to-sand-2 flex justify-center items-center">
       <a href="https://adonisjs.com" target="_blank" class="isolate">
-        <!-- <a :href="$route('home')" target="_blank" class="isolate"> -->
         <svg class="w-16 h-16 fill-primary" viewBox="0 0 33 33">
           <path
             fill-rule="evenodd"
@@ -346,3 +341,7 @@ import { Head } from '@inertiajs/vue3'
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Head } from '@inertiajs/vue3'
+</script>
