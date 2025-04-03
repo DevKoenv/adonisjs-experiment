@@ -9,5 +9,6 @@
   "trailingComma": "all",
   "tabWidth": 2,
   "endOfLine": "lf",
-  "plugins": ["prettier-plugin-edgejs"]
+  "plugins": ["prettier-plugin-edgejs", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./inertia/assets/css/app.css"
 }

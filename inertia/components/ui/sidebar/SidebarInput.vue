@@ -2,7 +2,7 @@
   <Input
     data-slot="sidebar-input"
     data-sidebar="input"
-    :class="cn('bg-background h-8 w-full shadow-none', props.class)"
+    :class="cn('h-8 w-full bg-background shadow-none', props.class)"
   >
     <slot />
   </Input>

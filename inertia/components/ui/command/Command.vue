@@ -3,7 +3,7 @@
     data-slot="command"
     v-bind="forwarded"
     :class="
-      cn('bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden rounded-md', props.class)
+      cn('flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground', props.class)
     "
   >
     <slot />

@@ -11,7 +11,7 @@
       )
     "
   >
-    <ScrollAreaThumb data-slot="scroll-area-thumb" class="bg-border relative flex-1 rounded-full" />
+    <ScrollAreaThumb data-slot="scroll-area-thumb" class="relative flex-1 rounded-full bg-border" />
   </ScrollAreaScrollbar>
 </template>
 

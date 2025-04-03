@@ -1,5 +1,5 @@
 <template>
-  <TagsInputItemText v-bind="forwardedProps" :class="cn('py-0.5 px-2 text-sm rounded bg-transparent', props.class)" />
+  <TagsInputItemText v-bind="forwardedProps" :class="cn('rounded bg-transparent px-2 py-0.5 text-sm', props.class)" />
 </template>
 
 <script setup lang="ts">

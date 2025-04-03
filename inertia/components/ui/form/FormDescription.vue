@@ -1,5 +1,5 @@
 <template>
-  <p :id="formDescriptionId" data-slot="form-description" :class="cn('text-muted-foreground text-sm', props.class)">
+  <p :id="formDescriptionId" data-slot="form-description" :class="cn('text-sm text-muted-foreground', props.class)">
     <slot />
   </p>
 </template>

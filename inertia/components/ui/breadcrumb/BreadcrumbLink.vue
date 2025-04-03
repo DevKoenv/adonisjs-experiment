@@ -3,7 +3,7 @@
     data-slot="breadcrumb-link"
     :as="as"
     :as-child="asChild"
-    :class="cn('hover:text-foreground transition-colors', props.class)"
+    :class="cn('transition-colors hover:text-foreground', props.class)"
   >
     <slot />
   </Primitive>
