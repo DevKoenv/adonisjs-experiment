@@ -37,29 +37,33 @@
 </template>
 
 <script setup lang="ts">
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarMenuSubItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
-import { ChevronRight, type LucideIcon } from 'lucide-vue-next'
 
-defineProps<{
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+
+import { ChevronRight, LucideIcon } from 'lucide-vue-next'
+
+interface Props {
   items: {
     title: string
     url: string
     icon?: LucideIcon
     isActive?: boolean
-    items?: {
+    items: {
       title: string
       url: string
     }[]
   }[]
-}>()
+}
+
+defineProps<Props>()
 </script>

@@ -1,33 +1,65 @@
 <template>
   <Sidebar v-bind="props">
     <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
+      <!-- Sidebar Header (App Icon & Name) -->
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg" as-child>
+            <Link :href="$route('dashboard')">
+              <div
+                class="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground"
+              >
+                <GalleryVerticalEnd class="size-5 fill-current text-white dark:text-black" />
+              </div>
+              <div class="ml-1 grid flex-1 text-left text-sm">
+                <span class="mb-0.5 truncate leading-none font-semibold">AdonisJS Starter Kit</span>
+              </div>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
     </SidebarHeader>
+
     <SidebarContent>
+      <!-- Main Nav -->
       <NavMain :items="data.navMain" />
-      <NavProjects :projects="data.projects" />
     </SidebarContent>
+
     <SidebarFooter>
-      <NavUser :user="data.user" />
+      <!-- Footer links -->
+      <NavFooter :items="data.footer" />
+
+      <!-- User Footer -->
+      <NavUser :user="user" />
     </SidebarFooter>
+
     <SidebarRail />
   </Sidebar>
 </template>
 
 <script setup lang="ts">
-import type { SidebarProps } from '@/components/ui/sidebar'
+import NavMain from '@/components/sidebar/NavMain.vue'
+import NavFooter from '@/components/sidebar/NavFooter.vue'
+import NavUser from '@/components/sidebar/NavUser.vue'
 
-import NavMain from '@/components/NavMain.vue'
-import NavProjects from '@/components/NavProjects.vue'
-import NavUser from '@/components/NavUser.vue'
-import TeamSwitcher from '@/components/TeamSwitcher.vue'
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarRail,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  type SidebarProps,
+} from '@/components/ui/sidebar'
 
 import {
   AudioWaveform,
   BookOpen,
   Bot,
   Command,
+  Folder,
   Frame,
   GalleryVerticalEnd,
   Map,
@@ -36,16 +68,22 @@ import {
   SquareTerminal,
 } from 'lucide-vue-next'
 
+import { Link, usePage } from '@inertiajs/vue3'
+import type { SharedProps } from '@adonisjs/inertia/types'
+
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: 'icon',
 })
+
+const page = usePage<SharedProps>()
+
+const { user } = page.props
 
 // This is sample data.
 const data = {
   user: {
     name: 'shadcn',
     email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
   },
   teams: [
     {
@@ -166,6 +204,18 @@ const data = {
       name: 'Travel',
       url: '#',
       icon: Map,
+    },
+  ],
+  footer: [
+    {
+      title: 'Github Repo',
+      href: 'https://github.com/laravel/vue-starter-kit',
+      icon: Folder,
+    },
+    {
+      title: 'Documentation',
+      href: 'https://laravel.com/docs/starter-kits',
+      icon: BookOpen,
     },
   ],
 }

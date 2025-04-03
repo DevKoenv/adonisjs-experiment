@@ -1,3 +1,4 @@
+import type User from '#models/user'
 import router from '@adonisjs/core/services/router'
 import { defineConfig } from '@adonisjs/inertia'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
@@ -7,6 +8,8 @@ const inertiaConfig = defineConfig({
 
   sharedData: {
     routes: () => router.toJSON(),
+    user: ({ auth }) => auth.user as User,
+    sidebarOpen: ({ request }) => request.cookiesList()['sidebar:state'] ?? true,
   },
 
   ssr: {

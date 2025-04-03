@@ -5,11 +5,11 @@
         <DropdownMenuTrigger as-child>
           <SidebarMenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            class="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar class="h-8 w-8 rounded-lg">
-              <AvatarImage :src="user.avatar" :alt="user.name" />
-              <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
+              <AvatarImage v-if="showAvatar" :src="user.avatar as string" :alt="user.name" />
+              <AvatarFallback class="rounded-lg"> {{ getInitials(user.name!) }} </AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-medium">{{ user.name }}</span>
@@ -27,8 +27,8 @@
           <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-lg">
-                <AvatarImage :src="user.avatar" :alt="user.name" />
-                <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
+                <AvatarImage v-if="showAvatar" :src="user.avatar as string" :alt="user.name" />
+                <AvatarFallback class="rounded-lg"> {{ getInitials(user.name!) }} </AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
                 <span class="truncate font-semibold">{{ user.name }}</span>
@@ -59,7 +59,7 @@
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem @click="logout" class="cursor-pointer">
             <LogOut />
             Log out
           </DropdownMenuItem>
@@ -82,15 +82,32 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+import { SharedProps } from '@adonisjs/inertia/types'
+import { router } from '@inertiajs/vue3'
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-vue-next'
+import { computed } from 'vue'
 
 const props = defineProps<{
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
+  user: SharedProps['user']
 }>()
 
 const { isMobile } = useSidebar()
+
+// @ts-ignore The user object does not have an avatar property, but for future use, we can add it
+const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '')
+
+function getInitials(fullName?: string): string {
+  if (!fullName) return ''
+
+  const names = fullName.trim().split(' ')
+
+  if (names.length === 0) return ''
+  if (names.length === 1) return names[0].charAt(0).toUpperCase()
+
+  return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase()
+}
+
+function logout() {
+  router.delete('/logout')
+}
 </script>

@@ -2,14 +2,14 @@
   <Head title="Homepage" />
 
   <div
-    class="fixed xl:absolute left-8 right-8 top-0 bottom-0 xl:inset-0 max-w-screen-xl mx-auto before:content-[''] before:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] before:absolute before:top-0 before:left-0 before:h-full before:w-px after:content-[''] after:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] after:absolute after:top-0 after:right-0 after:h-full after:w-px"
+    class="fixed top-0 right-8 bottom-0 left-8 mx-auto max-w-screen-xl before:absolute before:top-0 before:left-0 before:h-full before:w-px before:content-[''] before:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] after:absolute after:top-0 after:right-0 after:h-full after:w-px after:content-[''] after:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] xl:absolute xl:inset-0"
   ></div>
 
-  <div class="pt-4 h-full flex flex-col">
+  <div class="flex h-full flex-col pt-4">
     <!-- Header -->
-    <div class="grow pb-4 bg-gradient-to-b from-sand-1 to-sand-2 flex justify-center items-center">
+    <div class="flex grow items-center justify-center bg-gradient-to-b from-sand-1 to-sand-2 pb-4">
       <a href="https://adonisjs.com" target="_blank" class="isolate">
-        <svg class="w-16 h-16 fill-primary" viewBox="0 0 33 33">
+        <svg class="h-16 w-16 fill-primary" viewBox="0 0 33 33">
           <path
             fill-rule="evenodd"
             d="M0 16.333c0 13.173 3.16 16.333 16.333 16.333 13.173 0 16.333-3.16 16.333-16.333C32.666 3.16 29.506 0 16.333 0 3.16 0 0 3.16 0 16.333Zm6.586 3.393L11.71 8.083c.865-1.962 2.528-3.027 4.624-3.027 2.096 0 3.759 1.065 4.624 3.027l5.123 11.643c.233.566.432 1.297.432 1.93 0 2.893-2.029 4.923-4.923 4.923-.986 0-1.769-.252-2.561-.506-.812-.261-1.634-.526-2.695-.526-1.048 0-1.89.267-2.718.529-.801.253-1.59.503-2.538.503-2.894 0-4.923-2.03-4.923-4.924 0-.632.2-1.363.432-1.929Zm9.747-9.613-5.056 11.443c1.497-.699 3.227-1.032 5.056-1.032 1.763 0 3.56.333 4.99 1.032l-4.99-11.444Z"
@@ -21,10 +21,10 @@
 
     <!-- Bento with documentation, Adocasts, packages and Discord -->
     <div
-      class="isolate mt-10 max-w-screen-xl mx-auto px-16 xl:px-8 grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-3 gap-8"
+      class="isolate mx-auto mt-10 grid max-w-screen-xl grid-cols-1 gap-8 px-16 xl:grid-cols-2 xl:grid-rows-3 xl:px-8"
     >
       <article
-        class="row-span-3 relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-col gap-8"
+        class="group relative row-span-3 flex flex-col gap-8 rounded-2xl border border-sand-7 p-6 shadow-sm transition duration-700 ease-in-out hover:border-sand-8 hover:shadow"
       >
         <div class="relative opacity-80">
           <svg fill="none" viewBox="0 0 240 105">
@@ -54,11 +54,11 @@
             </defs>
           </svg>
 
-          <div class="absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-b from-white/0 to-white"></div>
+          <div class="absolute right-0 bottom-0 left-0 h-16 bg-gradient-to-b from-white/0 to-white"></div>
         </div>
 
         <div class="flex flex-row gap-4">
-          <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/20">
             <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
               <path
                 fill="currentColor"
@@ -75,7 +75,7 @@
               </a>
             </h2>
 
-            <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+            <p class="text-sm text-sand-11 transition duration-700 ease-in-out group-hover:text-sand-12">
               Dive into the official documentation to learn AdonisJS. Read carefully to discover an unmatched set of
               features, best practices and developer experience. Through examples, guides and API references, you'll
               find everything you need to build your next project. From installation to deployment, we've got you
@@ -86,9 +86,9 @@
       </article>
 
       <article
-        class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4"
+        class="group relative flex flex-row gap-4 rounded-2xl border border-sand-7 p-6 shadow-sm transition duration-700 ease-in-out hover:border-sand-8 hover:shadow"
       >
-        <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/20">
           <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
             <path
               fill="currentColor"
@@ -105,7 +105,7 @@
             </a>
           </h2>
 
-          <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+          <p class="text-sm text-sand-11 transition duration-700 ease-in-out group-hover:text-sand-12">
             Level up your development and Adonis skills with hours of video content, from beginner to advanced, through
             databases, testing, and more.
           </p>
@@ -113,9 +113,9 @@
       </article>
 
       <article
-        class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4"
+        class="group relative flex flex-row gap-4 rounded-2xl border border-sand-7 p-6 shadow-sm transition duration-700 ease-in-out hover:border-sand-8 hover:shadow"
       >
-        <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/20">
           <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
             <path
               fill="currentColor"
@@ -132,7 +132,7 @@
             </a>
           </h2>
 
-          <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+          <p class="text-sm text-sand-11 transition duration-700 ease-in-out group-hover:text-sand-12">
             Supercharge your AdonisJS application with packages built and maintained by both the core team and the
             community.
           </p>
@@ -140,9 +140,9 @@
       </article>
 
       <article
-        class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4"
+        class="group relative flex flex-row gap-4 rounded-2xl border border-sand-7 p-6 shadow-sm transition duration-700 ease-in-out hover:border-sand-8 hover:shadow"
       >
-        <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/20">
           <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
             <path
               fill="currentColor"
@@ -159,7 +159,7 @@
             </a>
           </h2>
 
-          <p class="text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-700">
+          <p class="text-sm text-sand-11 transition duration-700 ease-in-out group-hover:text-sand-12">
             Never get lost again, ask questions, and share your knowledge or projects with a growing and supportive
             community. Join us.
           </p>
@@ -168,14 +168,14 @@
     </div>
 
     <!-- Features -->
-    <div class="grow mt-10 mb-8 px-16 xl:px-8 max-w-screen-xl mx-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="mx-auto mt-10 mb-8 max-w-screen-xl grow px-16 xl:px-8">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <article
-          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group"
+          class="group relative rounded-lg border border-transparent bg-white px-5 py-4 transition duration-100 ease-in-out hover:border-sand-8 hover:shadow-sm"
         >
           <h2 class="font-semibold text-sand-12">
             <a href="https://lucid.adonisjs.com" target="_blank" class="flex flex-row gap-2">
-              <span class="bg-[#D5EAE7] h-6 w-6 flex justify-center items-center rounded">
+              <span class="flex h-6 w-6 items-center justify-center rounded bg-[#D5EAE7]">
                 <svg class="h-4 w-4 fill-[#0E766E]" viewBox="0 0 24 24">
                   <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                     <path d="M4 6a8 3 0 1 0 16 0A8 3 0 1 0 4 6" />
@@ -189,13 +189,13 @@
             </a>
           </h2>
 
-          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+          <p class="mt-4 text-sm text-sand-11 transition duration-100 ease-in-out group-hover:text-sand-12">
             A SQL ORM with a powerful query builder, active record, migrations, and model factories. Everything you need
             to work with databases.
           </p>
 
           <svg
-            class="absolute top-4 right-5 opacity-0 group-hover:opacity-100 text-sand-9 w-4 h-4 transition ease-in-out duration-100"
+            class="absolute top-4 right-5 h-4 w-4 text-sand-9 opacity-0 transition duration-100 ease-in-out group-hover:opacity-100"
             viewBox="0 0 24 24"
           >
             <path
@@ -210,11 +210,11 @@
         </article>
 
         <article
-          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group"
+          class="group relative rounded-lg border border-transparent bg-white px-5 py-4 transition duration-100 ease-in-out hover:border-sand-8 hover:shadow-sm"
         >
           <h2 class="font-semibold text-sand-12">
             <a href="https://vinejs.dev/" target="_blank" class="flex flex-row gap-2">
-              <span class="bg-[#F3DBFC] h-6 w-6 flex justify-center items-center rounded">
+              <span class="flex h-6 w-6 items-center justify-center rounded bg-[#F3DBFC]">
                 <svg class="h-4 w-4 fill-[#CA5AF2]" viewBox="0 0 24 24">
                   <path
                     fill="none"
@@ -231,13 +231,13 @@
             </a>
           </h2>
 
-          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+          <p class="mt-4 text-sm text-sand-11 transition duration-100 ease-in-out group-hover:text-sand-12">
             A yet simple but feature rich and type-safe form data validation. It comes with 50+ built-in rules and an
             expressive API to define custom rules.
           </p>
 
           <svg
-            class="absolute top-4 right-5 opacity-0 group-hover:opacity-100 text-sand-9 w-4 h-4 transition ease-in-out duration-100"
+            class="absolute top-4 right-5 h-4 w-4 text-sand-9 opacity-0 transition duration-100 ease-in-out group-hover:opacity-100"
             viewBox="0 0 24 24"
           >
             <path
@@ -252,11 +252,11 @@
         </article>
 
         <article
-          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group"
+          class="group relative rounded-lg border border-transparent bg-white px-5 py-4 transition duration-100 ease-in-out hover:border-sand-8 hover:shadow-sm"
         >
           <h2 class="font-semibold text-sand-12">
             <a href="https://inertiajs.com/" target="_blank" class="flex flex-row gap-2">
-              <span class="bg-[#B8EAE0] h-6 w-6 flex justify-center items-center rounded">
+              <span class="flex h-6 w-6 items-center justify-center rounded bg-[#B8EAE0]">
                 <svg class="h-4 w-4 fill-[#4BBBA5]" viewBox="0 0 24 24">
                   <path
                     fill="none"
@@ -273,13 +273,13 @@
             </a>
           </h2>
 
-          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+          <p class="mt-4 text-sm text-sand-11 transition duration-100 ease-in-out group-hover:text-sand-12">
             The modern monolithic application architecture. It allows you to build single-page applications without
             building an API.
           </p>
 
           <svg
-            class="absolute top-4 right-5 opacity-0 group-hover:opacity-100 text-sand-9 w-4 h-4 transition ease-in-out duration-100"
+            class="absolute top-4 right-5 h-4 w-4 text-sand-9 opacity-0 transition duration-100 ease-in-out group-hover:opacity-100"
             viewBox="0 0 24 24"
           >
             <path
@@ -294,11 +294,11 @@
         </article>
 
         <article
-          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group"
+          class="group relative rounded-lg border border-transparent bg-white px-5 py-4 transition duration-100 ease-in-out hover:border-sand-8 hover:shadow-sm"
         >
           <h2 class="font-semibold text-sand-12">
             <a href="https://japa.dev" target="_blank" class="flex flex-row gap-2">
-              <span class="bg-[#FACDDC] h-6 w-6 flex justify-center items-center rounded">
+              <span class="flex h-6 w-6 items-center justify-center rounded bg-[#FACDDC]">
                 <svg class="h-4 w-4 fill-[#DD3074]" viewBox="0 0 256 256">
                   <path
                     fill="currentColor"
@@ -311,13 +311,13 @@
             </a>
           </h2>
 
-          <p class="mt-4 text-sm text-sand-11 group-hover:text-sand-12 transition ease-in-out duration-100">
+          <p class="mt-4 text-sm text-sand-11 transition duration-100 ease-in-out group-hover:text-sand-12">
             From JSON API tests using Open API schema to browser tests with Playwright, it comes with everything you
             need to test your application.
           </p>
 
           <svg
-            class="absolute top-4 right-5 opacity-0 group-hover:opacity-100 text-sand-9 w-4 h-4 transition ease-in-out duration-100"
+            class="absolute top-4 right-5 h-4 w-4 text-sand-9 opacity-0 transition duration-100 ease-in-out group-hover:opacity-100"
             viewBox="0 0 24 24"
           >
             <path
@@ -334,7 +334,7 @@
     </div>
 
     <div
-      class="text-sm text-center [&>code]:font-medium [&>code]:text-[#a599ff] bg-sand-12 text-sand-1 fixed bottom-0 left-0 right-0 py-2"
+      class="fixed right-0 bottom-0 left-0 bg-sand-12 py-2 text-center text-sm text-sand-1 [&>code]:font-medium [&>code]:text-[#a599ff]"
     >
       Route for this page is registered in <code>start/routes.ts</code> file, rendering
       <code>inertia/pages/home.vue</code> template

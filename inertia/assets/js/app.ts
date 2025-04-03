@@ -1,7 +1,7 @@
 // @ts-nocheck
-/// <reference path="../../adonisrc.ts" />
-/// <reference path="../../config/inertia.ts" />
-/// <reference path="../types/global.d.ts" />
+/// <reference path="../../../adonisrc.ts" />
+/// <reference path="../../../config/inertia.ts" />
+/// <reference path="../../types/global.d.ts" />
 /// <reference types="vite/client" />
 
 import '@/assets/css/app.css'
