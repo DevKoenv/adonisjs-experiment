@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { PinInputInput, type PinInputInputProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 

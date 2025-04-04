@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { CalendarRoot, type CalendarRootEmits, type CalendarRootProps, useForwardPropsEmits } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 import {

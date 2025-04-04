@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import type { HTMLAttributes } from 'vue'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { MoreHorizontal } from 'lucide-vue-next'
 
 const props = defineProps<{

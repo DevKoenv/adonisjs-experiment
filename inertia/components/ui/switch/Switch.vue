@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { SwitchRoot, type SwitchRootEmits, type SwitchRootProps, SwitchThumb, useForwardPropsEmits } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 

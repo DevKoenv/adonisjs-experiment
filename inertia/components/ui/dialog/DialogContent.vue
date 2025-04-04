@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { X } from 'lucide-vue-next'
 import {
   DialogClose,

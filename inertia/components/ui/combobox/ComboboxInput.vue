@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { SearchIcon } from 'lucide-vue-next'
 import { ComboboxInput, type ComboboxInputEmits, type ComboboxInputProps, useForwardPropsEmits } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'

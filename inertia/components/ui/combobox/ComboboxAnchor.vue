@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import type { ComboboxAnchorProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { ComboboxAnchor, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 

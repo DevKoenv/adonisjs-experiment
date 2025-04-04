@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
 import type { HtmlHTMLAttributes } from 'vue'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { useForwardPropsEmits } from 'reka-ui'
 import { DrawerContent, DrawerPortal } from 'vaul-vue'
 import DrawerOverlay from './DrawerOverlay.vue'

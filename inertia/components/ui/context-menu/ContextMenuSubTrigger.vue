@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { ChevronRight } from 'lucide-vue-next'
 import { ContextMenuSubTrigger, type ContextMenuSubTriggerProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'

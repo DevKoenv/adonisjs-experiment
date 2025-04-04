@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import type { DrawerTitleProps } from 'vaul-vue'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { DrawerTitle } from 'vaul-vue'
 import { computed, type HtmlHTMLAttributes } from 'vue'
 

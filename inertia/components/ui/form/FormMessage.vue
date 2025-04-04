@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { ErrorMessage } from 'vee-validate'
 import { type HTMLAttributes, toValue } from 'vue'
 import { useFormField } from './useFormField'

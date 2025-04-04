@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { CalendarCell, type CalendarCellProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 

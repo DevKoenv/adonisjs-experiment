@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import type { StepperItemProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { StepperItem, useForwardProps } from 'reka-ui'
 
 import { computed, type HTMLAttributes } from 'vue'

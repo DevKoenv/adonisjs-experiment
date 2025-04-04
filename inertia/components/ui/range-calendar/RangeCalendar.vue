@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import {
   RangeCalendarRoot,
   type RangeCalendarRootEmits,

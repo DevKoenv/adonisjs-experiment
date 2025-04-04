@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import type { DialogOverlayProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { DrawerOverlay } from 'vaul-vue'
 import { computed, type HtmlHTMLAttributes } from 'vue'
 

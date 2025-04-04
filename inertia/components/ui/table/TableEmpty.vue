@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { computed, type HTMLAttributes } from 'vue'
 import TableCell from './TableCell.vue'
 import TableRow from './TableRow.vue'

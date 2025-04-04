@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import type { StepperRootEmits, StepperRootProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { StepperRoot, useForwardPropsEmits } from 'reka-ui'
 
 import { computed, type HTMLAttributes } from 'vue'

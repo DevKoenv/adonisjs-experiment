@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import type { PrimitiveProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { Primitive } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 import { type BadgeVariants, badgeVariants } from '.'

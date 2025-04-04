@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import type { ComboboxContentEmits, ComboboxContentProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { reactiveOmit } from '@vueuse/core'
 import { ComboboxContent, ComboboxPortal, useForwardPropsEmits } from 'reka-ui'
 

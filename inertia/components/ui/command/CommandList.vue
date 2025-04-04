@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import type { ListboxContentProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { ListboxContent, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 

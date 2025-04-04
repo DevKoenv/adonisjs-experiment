@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import type { CarouselEmits, CarouselProps, WithClassAsProps } from './interface'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { useProvideCarousel } from './useCarousel'
 
 const props = withDefaults(defineProps<CarouselProps & WithClassAsProps>(), {

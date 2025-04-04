@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import type { PaginationNextProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { buttonVariants, type ButtonVariants } from '@/components/ui/button'
 import { reactiveOmit } from '@vueuse/core'
 import { ChevronRightIcon } from 'lucide-vue-next'

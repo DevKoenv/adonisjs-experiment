@@ -59,9 +59,11 @@
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem @click="logout" class="cursor-pointer">
-            <LogOut />
-            Log out
+          <DropdownMenuItem as-child class="cursor-pointer">
+            <Link class="size-full" route="logout">
+              <LogOut />
+              Log out
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -83,7 +85,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 import { SharedProps } from '@adonisjs/inertia/types'
-import { router } from '@inertiajs/vue3'
+import { Link } from '@tuyau/inertia/vue'
+
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-vue-next'
 import { computed } from 'vue'
 
@@ -105,9 +108,5 @@ function getInitials(fullName?: string): string {
   if (names.length === 1) return names[0].charAt(0).toUpperCase()
 
   return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase()
-}
-
-function logout() {
-  router.delete('/logout')
 }
 </script>

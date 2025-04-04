@@ -69,7 +69,7 @@
 
       <div class="text-center text-sm text-muted-foreground">
         Already have an account?
-        <Link href="/login" class="underline underline-offset-4" :tabindex="6">Log in</Link>
+        <Link route="login" class="underline underline-offset-4" :tabindex="6">Log in</Link>
       </div>
     </form>
   </AuthLayout>
@@ -80,8 +80,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AuthLayout from '@/layouts/AuthLayout.vue'
-import { Head, Link, useForm } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 import { LoaderCircle } from 'lucide-vue-next'
+import { Link } from '@tuyau/inertia/vue'
+import { tuyau } from '@/assets/js/tuyau'
 
 const form = useForm({
   name: '',
@@ -91,7 +93,7 @@ const form = useForm({
 })
 
 const submit = () => {
-  form.post('/register', {
+  form.post(tuyau.register.$url(), {
     onFinish: () => form.reset('password', 'password_confirmation'),
   })
 }

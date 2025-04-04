@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import type { StepperSeparatorProps } from 'reka-ui'
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { StepperSeparator, useForwardProps } from 'reka-ui'
 
 import { computed, type HTMLAttributes } from 'vue'

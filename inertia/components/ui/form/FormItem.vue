@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { useId } from 'reka-ui'
 import { type HTMLAttributes, provide } from 'vue'
 import { FORM_ITEM_INJECTION_KEY } from './injectionKeys'

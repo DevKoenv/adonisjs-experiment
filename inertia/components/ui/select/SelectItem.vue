@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { Check } from 'lucide-vue-next'
 import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'

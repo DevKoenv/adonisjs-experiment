@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cn } from '@/utils/cn'
+import { cn } from '@/assets/js/cn'
 import { buttonVariants } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-vue-next'
 import { CalendarNext, type CalendarNextProps, useForwardProps } from 'reka-ui'
