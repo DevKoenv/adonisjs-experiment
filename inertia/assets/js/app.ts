@@ -1,17 +1,14 @@
-// @ts-nocheck
 /// <reference path="../../../adonisrc.ts" />
 /// <reference path="../../../config/inertia.ts" />
 /// <reference types="vite/client" />
 
-import '@/assets/css/app.css'
+import '../css/app.css'
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import { TuyauPlugin } from '@tuyau/inertia/vue'
 import { tuyau } from '@/assets/js/tuyau'
-import type { SharedProps } from '@adonisjs/inertia/types'
 import type { DefineComponent } from 'vue'
-import { api } from '../../../.adonisjs'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 

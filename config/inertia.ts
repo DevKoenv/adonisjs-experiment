@@ -1,20 +1,27 @@
-import type User from '#models/user'
-import router from '@adonisjs/core/services/router'
 import { defineConfig } from '@adonisjs/inertia'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
 
 const inertiaConfig = defineConfig({
+  /**
+   * Path to the Edge view that will be used as the root view for Inertia responses
+   */
   rootView: 'app',
 
+  /**
+   * Data that should be shared with all rendered pages
+   */
   sharedData: {
-    routes: () => router.toJSON(),
-    user: ({ auth }) => auth.user as User,
-    sidebarOpen: ({ request }) => request.cookiesList()['sidebar:state'] ?? true,
+    // user: ({ auth }) => auth.user as User,
+    user: (ctx) => ctx.inertia.always(() => ctx.auth.user),
+    sidebarOpen: (ctx) => ctx.request.cookiesList()['sidebar:state'] ?? true,
   },
 
+  /**
+   * Options for the server-side rendering
+   */
   ssr: {
     enabled: false,
-    entrypoint: 'inertia/assets/js/ssr.ts',
+    entrypoint: 'inertia/app/ssr.ts',
   },
 })
 
