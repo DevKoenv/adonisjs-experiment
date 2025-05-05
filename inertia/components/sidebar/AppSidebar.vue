@@ -5,7 +5,7 @@
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" as-child>
-            <Link route="dashboard">
+            <Link :href="$route('dashboard')">
               <div
                 class="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground"
               >
@@ -68,8 +68,7 @@ import {
   SquareTerminal,
 } from 'lucide-vue-next'
 
-import { Link } from '@tuyau/inertia/vue'
-import { usePage } from '@inertiajs/vue3'
+import { usePage, Link } from '@inertiajs/vue3'
 import type { SharedProps } from '@adonisjs/inertia/types'
 
 const props = withDefaults(defineProps<SidebarProps>(), {

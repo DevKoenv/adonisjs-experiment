@@ -50,22 +50,21 @@
 
       <div class="text-center text-sm text-muted-foreground">
         Don't have an account?
-        <Link route="register" :tabindex="5">Sign up</Link>
+        <Link :href="$route('register')" :tabindex="5">Sign up</Link>
       </div>
     </form>
   </AuthLayout>
 </template>
 
 <script setup lang="ts">
-import { tuyau } from '@/assets/js/tuyau'
 import InputError from '@/components/InputError.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AuthLayout from '@/layouts/AuthLayout.vue'
-import { Head, useForm } from '@inertiajs/vue3'
-import { Link } from '@tuyau/inertia/vue'
+import { Head, useForm, Link } from '@inertiajs/vue3'
 import { LoaderCircle } from 'lucide-vue-next'
+import { route } from '@izzyjs/route/client'
 
 const form = useForm({
   email: '',
@@ -73,7 +72,7 @@ const form = useForm({
 })
 
 const submit = () => {
-  form.post(tuyau.login.$url(), {
+  form.post(route('login').toString(), {
     onFinish: () => form.reset('password'),
   })
 }

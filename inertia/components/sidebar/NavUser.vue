@@ -60,7 +60,7 @@
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem as-child class="cursor-pointer">
-            <Link class="size-full" route="logout">
+            <Link class="size-full" :href="$route('logout')">
               <LogOut />
               Log out
             </Link>
@@ -85,7 +85,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 import { SharedProps } from '@adonisjs/inertia/types'
-import { Link } from '@tuyau/inertia/vue'
+import { Link } from '@inertiajs/vue3'
 
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-vue-next'
 import { computed } from 'vue'
