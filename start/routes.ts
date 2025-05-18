@@ -17,10 +17,10 @@ router.on('/').renderInertia('home').as('home')
 router
   .group(() => {
     router.get('/register', [RegisteredUserController, 'create']).as('register')
-    router.post('/register', [RegisteredUserController, 'store']).as('register.store')
+    router.post('/register', [RegisteredUserController, 'store'])
 
     router.get('/login', [AuthenticatedSessionController, 'create']).as('login')
-    router.post('/login', [AuthenticatedSessionController, 'store']).as('login.store')
+    router.post('/login', [AuthenticatedSessionController, 'store'])
   })
   .middleware(middleware.guest())
 

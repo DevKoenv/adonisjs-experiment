@@ -3,23 +3,6 @@ import app from '@adonisjs/core/services/app'
 import { defineConfig } from '@adonisjs/lucid'
 import { DatabaseConfig } from '@adonisjs/lucid/types/database'
 
-// const dbConfig = defineConfig({
-//   connection: 'sqlite',
-//   connections: {
-//     sqlite: {
-//       client: 'better-sqlite3',
-//       connection: {
-//         filename: app.tmpPath('db.sqlite3')
-//       },
-//       useNullAsDefault: true,
-//       migrations: {
-//         naturalSort: true,
-//         paths: ['database/migrations'],
-//       },
-//     },
-//   },
-// })
-
 const dbConfig: DatabaseConfig = defineConfig({
   connection: env.get('DB_CONNECTION', 'sqlite'),
   connections: {

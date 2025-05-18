@@ -3,7 +3,8 @@ import tailwindcss from '@tailwindcss/vite'
 import adonisjs from '@adonisjs/vite/client'
 import inertia from '@adonisjs/inertia/client'
 import vue from '@vitejs/plugin-vue'
-import path from 'node:path'
+import path, { resolve } from 'node:path'
+import url from 'node:url'
 
 export default defineConfig({
   plugins: [
@@ -17,13 +18,19 @@ export default defineConfig({
         'inertia/**/*.vue',
         'inertia/**/*.ts',
         'inertia/**/*.js',
-        'resources/**/*.css',
+        'inertia/**/*.css',
       ],
     }),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(import.meta.dirname, 'inertia'),
+      '@': resolve(path.dirname(url.fileURLToPath(import.meta.url)), './inertia'),
+      '~': resolve(path.dirname(url.fileURLToPath(import.meta.url)), './inertia'),
     },
+  },
+  build: {
+    // Ensure CSS is extracted and properly processed
+    cssCodeSplit: true,
+    assetsInlineLimit: 0,
   },
 })
