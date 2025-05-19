@@ -3,6 +3,7 @@ import { BaseModel, column, manyToMany, hasMany, beforeCreate } from '@adonisjs/
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
 import ResourcePermission from '#models/resource_permission'
+import type { Permission as PermissionType } from '#constants/permissions'
 
 export default class Permission extends BaseModel {
   static selfAssignPrimaryKey = true
@@ -11,7 +12,7 @@ export default class Permission extends BaseModel {
   declare id: string // UUID
 
   @column()
-  declare name: string
+  declare name: PermissionType
 
   @column()
   declare description: string

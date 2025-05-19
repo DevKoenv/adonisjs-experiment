@@ -15,6 +15,8 @@ export default class extends BaseSchema {
 
       table.boolean('value').notNullable().defaultTo(true)
 
+      table.primary(['user_id', 'permission_id', 'resource_type', 'resource_id'])
+
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

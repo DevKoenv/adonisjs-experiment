@@ -56,7 +56,12 @@ export default class ResourcePermission extends BaseModel {
     resourceType: string,
     resourceId: string,
   ): Promise<boolean> {
-    const found = await this.query().where({ userId, permissionId, resourceType, resourceId }).first()
+    const found = await this.query()
+      .where('user_id', userId)
+      .where('permission_id', permissionId)
+      .where('resource_type', resourceType)
+      .where('resource_id', resourceId)
+      .first()
     return !!found
   }
 
