@@ -14,8 +14,8 @@ type ResourceId = string | number
  * @property resourceId - Optional resource ID for resource-specific checks (UUID string or number)
  */
 interface PermissionContext {
-  user: User | { id: string }
-  permission: Permission
+  user?: User | { id: string }
+  permission?: Permission
   resourceType?: ResourceType
   resourceId?: ResourceId
 }
@@ -26,10 +26,13 @@ interface PermissionContext {
  * @example
  * ```ts
  * // Check a global permission
- * const allowed = await PermissionService.user(user).permission('document.create').check()
+ * const allowed = await PermissionService.builder()
+ *   .user(user)
+ *   .permission('document.create')
+ *   .check()
  *
  * // Check a resource-specific permission
- * const allowed = await PermissionService
+ * const allowed = await PermissionService.builder()
  *   .user(user)
  *   .permission('document.edit')
  *   .resource('document', 'uuid-or-id')
@@ -37,57 +40,63 @@ interface PermissionContext {
  * ```
  */
 export class PermissionService {
+  private ctx: PermissionContext = {}
+
   /**
-   * Entry point for permission checks. Chain with `.permission()` and optionally `.resource()`.
-   * @param user - The user object or an object with an `id` property (UUID string)
-   * @returns Permission builder
+   * Create a new PermissionService builder.
+   * @returns {PermissionService} A new builder instance.
    */
-  static user(user: User | { id: string }) {
-    return {
-      /**
-       * Specify the permission to check.
-       * @param permission - The permission name (enum or string)
-       * @returns Permission builder
-       */
-      permission: (permission: Permission) => ({
-        /**
-         * Specify the resource type and ID for resource-specific checks.
-         * @param type - The resource type (e.g., 'document')
-         * @param id - The resource ID (UUID string or number)
-         * @returns Permission builder
-         */
-        resource: (type: ResourceType, id: ResourceId) => ({
-          /**
-           * Perform the permission check for the user, permission, and resource.
-           * @returns Promise<boolean>
-           */
-          check: () =>
-            PermissionService._check({
-              user,
-              permission,
-              resourceType: type,
-              resourceId: id,
-            }),
-        }),
-        /**
-         * Perform a global permission check (not resource-specific).
-         * @returns Promise<boolean>
-         */
-        check: () =>
-          PermissionService._check({
-            user,
-            permission,
-          }),
-      }),
-    }
+  static builder(): PermissionService {
+    return new PermissionService()
+  }
+
+  /**
+   * Set the user for the permission check.
+   * @param user - The user object or an object with an `id` property (UUID string)
+   * @returns this (for chaining)
+   */
+  user(user: User | { id: string }): this {
+    this.ctx.user = user
+    return this
+  }
+
+  /**
+   * Specify the permission to check.
+   * @param permission - The permission name (enum or string)
+   * @returns this (for chaining)
+   */
+  permission(permission: Permission): this {
+    this.ctx.permission = permission
+    return this
+  }
+
+  /**
+   * Specify the resource type and ID for resource-specific checks.
+   * @param type - The resource type (e.g., 'document')
+   * @param id - The resource ID (UUID string or number)
+   * @returns this (for chaining)
+   */
+  resource(type: ResourceType, id: ResourceId): this {
+    this.ctx.resourceType = type
+    this.ctx.resourceId = id
+    return this
+  }
+
+  /**
+   * Perform the permission check for the user, permission, and resource.
+   * @returns Promise<boolean>
+   */
+  async check(): Promise<boolean> {
+    return this._check()
   }
 
   /**
    * Internal method to check if a user has a given permission, optionally for a resource.
-   * @param ctx - PermissionContext
    * @returns Promise<boolean>
    */
-  private static async _check(ctx: PermissionContext): Promise<boolean> {
+  private async _check(): Promise<boolean> {
+    const ctx = this.ctx
+
     // --- 1. Validate input context ---
     if (!ctx.user || !ctx.permission) {
       throw new Error('User and permission must be set')
@@ -101,10 +110,8 @@ export class PermissionService {
     if (!permissionModel) return false
 
     // --- 3. Check for resource-specific user permission ---
-    // If both resourceType and resourceId are provided, check for a direct grant/deny
     if (ctx.resourceType && ctx.resourceId !== undefined) {
-      //* Note: resource_id is stored as a string in the DB, so we cast here
-
+      // Note: resource_id is stored as a string in the DB, so we cast here
       const resourcePerm = await ResourcePermission.query()
         .where('user_id', userId)
         .where('permission_id', permissionModel.id)
@@ -112,18 +119,15 @@ export class PermissionService {
         .where('resource_id', String(ctx.resourceId))
         .first()
 
-      // If a resource-specific permission exists, return its value (true/false)
       if (resourcePerm) {
         return Boolean(resourcePerm.value)
       }
     }
 
     // --- 4. Load user and their roles with permissions (global) ---
-    // If no resource-specific permission, check global permissions via roles
     const user = await User.find(userId)
     if (!user) return false
 
-    // Preload only roles that have this permission
     await user.load('roles', (roleQuery) => {
       roleQuery.preload('permissions', (permQuery) => {
         permQuery.where('permissions.id', permissionModel.id)
@@ -131,12 +135,10 @@ export class PermissionService {
     })
 
     // --- 5. Gather all role-permission grants ---
-    // Each role may grant or deny the permission; collect all grants
     const grants = PermissionService._collectRoleGrants(user, permissionModel.id)
     if (grants.length === 0) return false
 
     // --- 6. Resolve the final permission decision ---
-    // Use the highest-weight role; if tied, deny wins
     return PermissionService._resolveGrant(grants)
   }
 
@@ -152,12 +154,9 @@ export class PermissionService {
   private static _collectRoleGrants(user: User, permissionId: string): { value: boolean; weight: number }[] {
     const grants: { value: boolean; weight: number }[] = []
 
-    // Loop through each role and its permissions
     for (const role of user.roles) {
       for (const perm of role.permissions) {
-        // Compare as string, since both are UUIDs
         if (perm.id === permissionId) {
-          // The pivot_value may be boolean or number (1/0)
           const value = perm.$extras.pivot_value === true || perm.$extras.pivot_value === 1
           grants.push({ value, weight: role.weight })
         }
@@ -177,14 +176,9 @@ export class PermissionService {
    * If multiple roles with the same highest weight have conflicting grants, denial takes precedence.
    */
   private static _resolveGrant(grants: { value: boolean; weight: number }[]): boolean {
-    // Sort by descending weight (higher = more important)
     grants.sort((a, b) => b.weight - a.weight)
     const topWeight = grants[0].weight
-
-    // Filter to only the highest-weight grants
     const topGrants = grants.filter((g) => g.weight === topWeight)
-
-    // If any of the top grants is a denial, deny access
     return !topGrants.some((g) => g.value === false)
   }
 }
