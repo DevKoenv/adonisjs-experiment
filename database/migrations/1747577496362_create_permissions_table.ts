@@ -8,9 +8,6 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.string('name').notNullable().unique()
       table.string('description').nullable()
-
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
     })
   }
 

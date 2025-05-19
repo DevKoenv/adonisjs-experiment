@@ -16,7 +16,9 @@ export default class Permission extends BaseModel {
   @column()
   declare description: string
 
-  @manyToMany(() => Role)
+  @manyToMany(() => Role, {
+    pivotTable: 'role_permissions',
+  })
   declare roles: ManyToMany<typeof Role>
 
   @hasMany(() => ResourcePermission)

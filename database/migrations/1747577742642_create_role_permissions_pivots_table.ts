@@ -8,6 +8,8 @@ export default class extends BaseSchema {
       table.uuid('role_id').notNullable().references('id').inTable('roles').onDelete('CASCADE').index()
       table.uuid('permission_id').notNullable().references('id').inTable('permissions').onDelete('CASCADE').index()
 
+      table.boolean('value').notNullable().defaultTo(true)
+
       table.primary(['role_id', 'permission_id'])
 
       table.timestamp('created_at')

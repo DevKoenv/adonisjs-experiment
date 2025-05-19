@@ -22,6 +22,9 @@ export default class ResourcePermission extends BaseModel {
   @belongsTo(() => Permission)
   declare permission: BelongsTo<typeof Permission>
 
+  @column()
+  declare value: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

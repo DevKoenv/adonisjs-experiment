@@ -15,19 +15,31 @@ export default class Role extends BaseModel {
   declare name: string
 
   @column()
+  declare slug: string
+
+  @column()
   declare weight: number
+
+  @manyToMany(() => User, {
+    pivotTable: 'user_roles',
+    pivotTimestamps: {
+      createdAt: true,
+      updatedAt: false,
+    },
+  })
+  declare users: ManyToMany<typeof User>
+
+  @manyToMany(() => Permission, {
+    pivotTable: 'role_permissions',
+    pivotColumns: ['value'],
+  })
+  declare permissions: ManyToMany<typeof Permission>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @manyToMany(() => User)
-  declare users: ManyToMany<typeof User>
-
-  @manyToMany(() => Permission)
-  declare permissions: ManyToMany<typeof Permission>
 
   @beforeCreate()
   static assignUuid(role: Role) {

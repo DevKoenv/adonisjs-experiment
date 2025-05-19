@@ -31,17 +31,23 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ serializeAs: null })
   declare password: string
 
+  @manyToMany(() => Role, {
+    pivotTable: 'user_roles',
+    pivotTimestamps: {
+      createdAt: true,
+      updatedAt: false,
+    },
+  })
+  declare roles: ManyToMany<typeof Role>
+
+  @hasMany(() => ResourcePermission)
+  declare resourcePermissions: HasMany<typeof ResourcePermission>
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @manyToMany(() => Role)
-  declare roles: ManyToMany<typeof Role>
-
-  @hasMany(() => ResourcePermission)
-  declare resourcePermissions: HasMany<typeof ResourcePermission>
 
   @beforeCreate()
   static assignUuid(user: User) {
