@@ -16,8 +16,14 @@ export default class ResourcePermission extends BaseModel {
   @column()
   declare resource_id: string
 
+  @column()
+  declare user_id: string
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
+
+  @column()
+  declare permission_id: string
 
   @belongsTo(() => Permission)
   declare permission: BelongsTo<typeof Permission>
