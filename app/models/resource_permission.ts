@@ -66,17 +66,24 @@ export default class ResourcePermission extends BaseModel {
   }
 
   /**
-   * Get the resource permissions for a user
+   * Get a resource permission for a user
    * @param userId - The ID of the user
-   * @returns The resource permissions for the user
+   * @param permissionId - The ID of the permission
+   * @param resourceType - The type of the resource
+   * @param resourceId - The ID of the resource
+   * @returns The resource permission if found, null otherwise
    */
-  static async getForUser(userId: string) {
-    const resourcePermissions = await this.query()
+  static async getFor(
+    userId: string,
+    permissionId: string,
+    resourceType: string,
+    resourceId: string,
+  ): Promise<ResourcePermission | null> {
+    return await this.query()
       .where('user_id', userId)
-      .preload('permission')
-      .preload('user')
-      .orderBy('created_at', 'desc')
-
-    return resourcePermissions
+      .where('permission_id', permissionId)
+      .where('resource_type', resourceType)
+      .where('resource_id', resourceId)
+      .first()
   }
 }
