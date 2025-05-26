@@ -6,14 +6,6 @@ import ResourcePermission from '#models/resource_permission'
 type ResourceType = string
 type ResourceId = string | number
 
-/**
- * Context object for permission checks.
- * @property user - The user instance or an object with an `id` property (UUID string)
- * @property permission - The permission name (enum or string)
- * @property resourceType - Optional resource type for resource-specific checks
- * @property resourceId - Optional resource ID for resource-specific checks (UUID string or number)
- * @property ownerId - Optional owner ID for ownership checks (UUID string)
- */
 interface PermissionContext {
   user?: User | { id: string }
   permission?: Permission
@@ -22,224 +14,293 @@ interface PermissionContext {
   ownerId?: string
 }
 
+export interface PermissionDebugResult {
+  allowed: boolean
+  reason: string
+  details?: any
+}
+
 /**
- * Service for checking user permissions, both globally and for specific resources.
- *
- * @example
- * ```ts
- * // Check a global permission
- * const allowed = await PermissionService.builder()
- *   .user(user)
- *   .permission('document.create')
- *   .check()
- *
- * // Check a resource-specific permission
- * const allowed = await PermissionService.builder()
- *   .user(user)
- *   .permission('document.edit')
- *   .resource('document', 'uuid-or-id')
- *   .check()
- * ```
+ * PermissionService: strict zero-based, ACL-first, user/role/ownership, wildcards, root *.
+ * See docs/permission-system.md for rules.
  */
 export class PermissionService {
   private ctx: PermissionContext = {}
 
-  /**
-   * Create a new PermissionService builder.
-   * @returns {PermissionService} A new builder instance.
-   */
   static builder(): PermissionService {
     return new PermissionService()
   }
 
-  /**
-   * Set the user for the permission check.
-   * @param user - The user object or an object with an `id` property (UUID string)
-   * @returns this (for chaining)
-   */
   user(user: User | { id: string }): this {
     this.ctx.user = user
     return this
   }
 
-  /**
-   * Specify the permission to check.
-   * @param permission - The permission name (enum or string)
-   * @returns this (for chaining)
-   */
   permission(permission: Permission): this {
     this.ctx.permission = permission
     return this
   }
 
-  /**
-   * Specify the resource type and ID for resource-specific checks.
-   * @param type - The resource type (e.g., 'document')
-   * @param id - The resource ID (UUID string or number)
-   * @returns this (for chaining)
-   */
   resource(type: ResourceType, id: ResourceId): this {
     this.ctx.resourceType = type
     this.ctx.resourceId = id
     return this
   }
 
-  /**
-   * Specify the owner ID for ownership checks.
-   * @param ownerId - The owner ID (UUID string)
-   * @returns this (for chaining)
-   */
   owner(ownerId: string): this {
     this.ctx.ownerId = ownerId
     return this
   }
 
-  /**
-   * Perform the permission check for the user, permission, and resource.
-   * Follows the order:
-   * 1. Resource-specific (ACL)
-   * 2. Ownership
-   * 3. .others
-   * 4. Global permission (if not resource-specific)
-   * 5. Deny
-   *
-   * @returns Promise<boolean> - True if the user is allowed, false otherwise.
-   */
   async check(): Promise<boolean> {
     const ctx = this.ctx
-    // Ensure both user and permission are set before proceeding
     if (!ctx.user || !ctx.permission) throw new Error('User and permission must be set')
     const userId: string = ctx.user.id
 
-    // Look up the permission model by its name (enum or string)
-    const permissionModel = await PermissionModel.findBy('name', ctx.permission)
-    if (!permissionModel) return false
+    // 1. Root '*' permission always grants access (user or any role)
+    if (await this._hasUserOrRolePermission(userId, '*')) return true
 
-    // 1. Resource-specific (ACL) check
+    // 2. ACL (resource-specific, no wildcards)
     if (ctx.resourceType && ctx.resourceId !== undefined) {
-      // 1. Ownership check
-      if (ctx.ownerId && ctx.ownerId === userId) {
-        if (await this._hasGlobalPermission(userId, permissionModel.id)) return true
+      const permissionModel = await PermissionModel.findBy('name', ctx.permission)
+      if (permissionModel) {
+        const acl = await ResourcePermission.findBy({
+          user_id: userId,
+          permission_id: permissionModel.id,
+          resource_type: ctx.resourceType,
+          resource_id: String(ctx.resourceId),
+        })
+        if (acl) return Boolean(acl.value)
       }
+    }
 
-      // 2. .others (admin/manager override)
-      if (!ctx.ownerId || ctx.ownerId !== userId) {
-        const othersPermission = `${ctx.permission}.others`
-        const othersPermissionModel = await PermissionModel.findBy('name', othersPermission)
-        if (othersPermissionModel) {
-          if (await this._hasGlobalPermission(userId, othersPermissionModel.id)) return true
-        }
-      }
+    // 3. User direct permission (wildcards supported)
+    const userPerm = await this._findUserPermission(userId, ctx.permission)
+    if (userPerm !== undefined) return userPerm
 
-      // 3. Resource-specific (ACL) check (only if not owner and no .others)
-      const resourcePerm = await ResourcePermission.getFor(
-        userId,
-        permissionModel.id,
-        ctx.resourceType,
-        String(ctx.resourceId),
-      )
-      if (resourcePerm) {
-        return Boolean(resourcePerm.value)
-      }
+    // 4. Role-based permission (wildcards supported)
+    const rolePerm = await this._findRolePermission(userId, ctx.permission)
+    if (rolePerm !== undefined) return rolePerm
 
-      // 4. Deny (do NOT check global permission here)
+    // 5. Ownership: only if user is owner and has base permission (never .others)
+    if (ctx.resourceType && ctx.resourceId !== undefined && ctx.ownerId && ctx.ownerId === userId) {
+      // Only check base permission (never .others)
+      const hasBase = await this._findUserPermission(userId, ctx.permission)
+      if (hasBase !== undefined) return hasBase
+      const hasRoleBase = await this._findRolePermission(userId, ctx.permission)
+      if (hasRoleBase !== undefined) return hasRoleBase
+      // If no permission, deny
       return false
     }
 
-    // 5. Global permission (no resource context)
-    return this._hasGlobalPermission(userId, permissionModel.id)
+    // 6. .others: only if not owner, and .others permission is granted
+    if (ctx.resourceType && ctx.resourceId !== undefined && (!ctx.ownerId || ctx.ownerId !== userId)) {
+      const othersPerm = `${ctx.permission}.others` as Permission
+      const userOthers = await this._findUserPermission(userId, othersPerm)
+      if (userOthers !== undefined) return userOthers
+      const roleOthers = await this._findRolePermission(userId, othersPerm)
+      if (roleOthers !== undefined) return roleOthers
+    }
+
+    // 7. Default deny
+    return false
+  }
+
+  async debug(): Promise<PermissionDebugResult> {
+    const ctx = this.ctx
+    if (!ctx.user || !ctx.permission) throw new Error('User and permission must be set')
+    const userId: string = ctx.user.id
+
+    // 1. Root '*' permission always grants access (user or any role)
+    if (await this._hasUserOrRolePermission(userId, '*')) {
+      return {
+        allowed: true,
+        reason: "User or one of user's roles has root '*' permission",
+      }
+    }
+
+    // 2. ACL (resource-specific, no wildcards)
+    if (ctx.resourceType && ctx.resourceId !== undefined) {
+      const permissionModel = await PermissionModel.findBy('name', ctx.permission)
+      if (permissionModel) {
+        const acl = await ResourcePermission.findBy({
+          user_id: userId,
+          permission_id: permissionModel.id,
+          resource_type: ctx.resourceType,
+          resource_id: String(ctx.resourceId),
+        })
+
+        if (acl) {
+          return {
+            allowed: Boolean(acl.value),
+            reason: `ACL entry for user on resource (${ctx.resourceType}:${ctx.resourceId}) with permission '${ctx.permission}'`,
+            details: { acl },
+          }
+        }
+      }
+    }
+
+    // 3. User direct permission (wildcards supported)
+    const userPerm = await this._findUserPermission(userId, ctx.permission)
+    if (userPerm !== undefined) {
+      return {
+        allowed: userPerm,
+        reason: `Direct user permission${userPerm ? ' grants' : ' denies'} '${ctx.permission}'`,
+      }
+    }
+
+    // 4. Role-based permission (wildcards supported)
+    const rolePerm = await this._findRolePermission(userId, ctx.permission)
+    if (rolePerm !== undefined) {
+      return {
+        allowed: rolePerm,
+        reason: `Role-based permission${rolePerm ? ' grants' : ' denies'} '${ctx.permission}'`,
+      }
+    }
+
+    // 5. Ownership: only if user is owner and has base permission (never .others)
+    if (ctx.resourceType && ctx.resourceId !== undefined && ctx.ownerId && ctx.ownerId === userId) {
+      const hasBase = await this._findUserPermission(userId, ctx.permission)
+      if (hasBase !== undefined) {
+        return {
+          allowed: hasBase,
+          reason: `User is owner and direct user permission${hasBase ? ' grants' : ' denies'} '${ctx.permission}'`,
+        }
+      }
+      const hasRoleBase = await this._findRolePermission(userId, ctx.permission)
+      if (hasRoleBase !== undefined) {
+        return {
+          allowed: hasRoleBase,
+          reason: `User is owner and role-based permission${hasRoleBase ? ' grants' : ' denies'} '${ctx.permission}'`,
+        }
+      }
+      return {
+        allowed: false,
+        reason: 'User is owner but has no base permission',
+      }
+    }
+
+    // 6. .others: only if not owner, and .others permission is granted
+    if (ctx.resourceType && ctx.resourceId !== undefined && (!ctx.ownerId || ctx.ownerId !== userId)) {
+      const othersPerm = `${ctx.permission}.others` as Permission
+      const userOthers = await this._findUserPermission(userId, othersPerm)
+      if (userOthers !== undefined) {
+        return {
+          allowed: userOthers,
+          reason: `Direct user permission${userOthers ? ' grants' : ' denies'} '${othersPerm}' (.others)`,
+        }
+      }
+      const roleOthers = await this._findRolePermission(userId, othersPerm)
+      if (roleOthers !== undefined) {
+        return {
+          allowed: roleOthers,
+          reason: `Role-based permission${roleOthers ? ' grants' : ' denies'} '${othersPerm}' (.others)`,
+        }
+      }
+    }
+
+    // 7. Default deny
+    return {
+      allowed: false,
+      reason: 'No matching permission found, default deny',
+    }
+  }
+
+  // --- Internal helpers ---
+
+  /**
+   * Returns true if user or any role has the specified permission (including wildcards).
+   */
+  private async _hasUserOrRolePermission(userId: string, permName: string): Promise<boolean> {
+    // User direct
+    if ((await this._findUserPermission(userId, permName)) === true) return true
+    // Role
+    if ((await this._findRolePermission(userId, permName)) === true) return true
+    return false
   }
 
   /**
-   * Internal method to check if a user has a given global permission.
-   * Loads the user's roles and their permissions, then aggregates grants/denials.
-   * @param userId - The user ID (UUID string)
-   * @param permissionId - The permission ID (UUID string)
-   * @returns Promise<boolean> - True if the user is granted the permission, false otherwise.
+   * Find direct user permission (including wildcards). Returns true/false if found, else undefined.
+   * (Direct user-permission assignment not implemented in schema, so always undefined.)
    */
-  private async _hasGlobalPermission(userId: string, permissionId: string): Promise<boolean> {
-    // Find the user by ID
-    const user = await User.find(userId)
-    if (!user) return false
+  private async _findUserPermission(_userId: string, _permName: string): Promise<boolean | undefined> {
+    //TODO: add a user_permissions table, implement lookup here.
+    // For now, always undefined.
+    return undefined
+  }
 
-    // Load the user's roles and preload only the relevant permission
+  /**
+   * Find role-based permission (including wildcards). Returns true/false if found, else undefined.
+   */
+  private async _findRolePermission(userId: string, permName: string): Promise<boolean | undefined> {
+    const user = await User.find(userId)
+    if (!user) return undefined
     await user.load('roles', (roleQuery) => {
-      roleQuery.preload('permissions', (permQuery) => {
-        permQuery.where('permissions.id', permissionId)
-      })
+      roleQuery.preload('permissions')
     })
 
-    // Collect all grants/denials from the user's roles for this permission
-    const grants = PermissionService._collectRoleGrants(user, permissionId)
-    if (grants.length === 0) return false
+    // Try exact match
+    let permModel = await PermissionModel.findBy('name', permName)
+    if (permModel) {
+      const grants = PermissionService._collectRoleGrants(user, permModel.id)
+      if (grants.length > 0) return PermissionService._resolveGrant(grants)
+    }
 
-    // Resolve the final decision based on role weights and grant values
-    return PermissionService._resolveGrant(grants)
+    // Wildcard logic
+    const parts = permName.split('.')
+    if (parts.length >= 2) {
+      if (parts.length === 3 && parts[2] === 'others') {
+        const wildcardOthers = `${parts[0]}.*.others`
+        permModel = await PermissionModel.findBy('name', wildcardOthers)
+        if (permModel) {
+          const grants = PermissionService._collectRoleGrants(user, permModel.id)
+          if (grants.length > 0) return PermissionService._resolveGrant(grants)
+        }
+      }
+      if (parts.length === 2) {
+        const wildcard = `${parts[0]}.*`
+        permModel = await PermissionModel.findBy('name', wildcard)
+        if (permModel) {
+          const grants = PermissionService._collectRoleGrants(user, permModel.id)
+          if (grants.length > 0) return PermissionService._resolveGrant(grants)
+        }
+      }
+    }
+
+    // Global wildcard: '*'
+    permModel = await PermissionModel.findBy('name', '*')
+    if (permModel) {
+      const grants = PermissionService._collectRoleGrants(user, permModel.id)
+      if (grants.length > 0) return PermissionService._resolveGrant(grants)
+    }
+
+    return undefined
   }
 
   /**
    * Collects all grants/denials for a permission from the user's roles.
-   * Iterates through each role assigned to the user, and for each role,
-   * checks if the role has the specified permission. If so, it extracts
-   * the grant/deny value from the pivot table (role_permission) and the
-   * role's weight for later resolution.
-   *
-   * @param user - The user model with preloaded roles and permissions.
-   * @param permissionId - The permission ID to check (UUID string)
-   * @returns Array of grant objects with value and role weight.
-   *
-   * @remarks
-   * - The `permissionId` is a UUID string, matching the database schema.
-   * - The `value` is determined from the pivot table's `pivot_value` field,
-   *   which may be a boolean or a number (1 for true, 0 for false).
-   * - The returned array may be empty if the user has no roles with this permission.
    */
   private static _collectRoleGrants(user: User, permissionId: string): { value: boolean; weight: number }[] {
     const grants: { value: boolean; weight: number }[] = []
-
-    // Iterate over each role assigned to the user
     for (const role of user.roles) {
-      // For each role, check all permissions assigned to that role
       for (const perm of role.permissions) {
-        // If the permission matches the one we're checking
         if (perm.id === permissionId) {
-          // Extract the grant/deny value from the pivot table
-          // Accepts both boolean true and numeric 1 as "grant"
           const value = perm.$extras.pivot_value === true || perm.$extras.pivot_value === 1
-          // Store the grant/deny value along with the role's weight
           grants.push({ value, weight: role.weight })
         }
       }
     }
-
-    // Return all collected grants/denials for this permission
     return grants
   }
 
   /**
    * Resolves the final permission decision from all grants.
    * Uses the highest-weight role; if tied, deny wins.
-   * @param grants - Array of grant objects.
-   * @returns boolean - True if granted, false if denied.
-   *
-   * @remarks
-   * - Sorts grants by role weight descending (highest first).
-   * - Only considers grants from roles with the highest weight.
-   * - If any of the top-weight roles deny (value === false), the result is denied.
-   * - If all top-weight roles grant (value === true), the result is granted.
-   * - This ensures that denial takes precedence in case of conflict at the highest weight.
-   * - If grants array is empty, this method should not be called (handled by caller).
    */
   private static _resolveGrant(grants: { value: boolean; weight: number }[]): boolean {
-    // Sort grants by descending role weight so highest-weight roles come first
     grants.sort((a, b) => b.weight - a.weight)
-
-    // Get the highest weight among all roles
     const topWeight = grants[0].weight
-    // Filter to only those grants from roles with the highest weight
     const topGrants = grants.filter((g) => g.weight === topWeight)
-
-    // If any top-weight role denies, deny takes precedence
     return !topGrants.some((g) => g.value === false)
   }
 }

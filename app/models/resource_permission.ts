@@ -11,24 +11,26 @@ export default class ResourcePermission extends BaseModel {
   declare id: string // UUID
 
   @column()
-  declare resource_type: string
+  declare resourceType: string
 
   @column()
-  declare resource_id: string
+  declare resourceId: string
 
   @column()
-  declare user_id: string
+  declare userId: string
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
   @column()
-  declare permission_id: string
+  declare permissionId: string
 
   @belongsTo(() => Permission)
   declare permission: BelongsTo<typeof Permission>
 
-  @column()
+  @column({
+    serialize: (value: number) => Boolean(value),
+  })
   declare value: boolean
 
   @column.dateTime({ autoCreate: true })
@@ -56,16 +58,18 @@ export default class ResourcePermission extends BaseModel {
     resourceType: string,
     resourceId: string,
   ): Promise<boolean> {
-    const found = await this.query()
-      .where('user_id', userId)
-      .where('permission_id', permissionId)
-      .where('resource_type', resourceType)
-      .where('resource_id', resourceId)
-      .first()
+    const found = await this.findBy({
+      user_id: userId,
+      permission_id: permissionId,
+      resource_type: resourceType,
+      resource_id: resourceId,
+    })
     return !!found
   }
 
   /**
+   * @deprecated use `findBy` instead
+   *
    * Get a resource permission for a user
    * @param userId - The ID of the user
    * @param permissionId - The ID of the permission
@@ -79,11 +83,11 @@ export default class ResourcePermission extends BaseModel {
     resourceType: string,
     resourceId: string,
   ): Promise<ResourcePermission | null> {
-    return await this.query()
-      .where('user_id', userId)
-      .where('permission_id', permissionId)
-      .where('resource_type', resourceType)
-      .where('resource_id', resourceId)
-      .first()
+    return await this.findBy({
+      user_id: userId,
+      permission_id: permissionId,
+      resource_type: resourceType,
+      resource_id: resourceId,
+    })
   }
 }
