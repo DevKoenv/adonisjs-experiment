@@ -74,35 +74,33 @@ export class PermissionService {
       }
     }
 
-    // 3. User direct permission (wildcards supported)
+    // 3. Ownership Check (if resource has owner)
+    if (ctx.resourceType && ctx.resourceId !== undefined && ctx.ownerId) {
+      if (ctx.ownerId === userId) {
+        // User is owner: only check base permission (never .others)
+        if (await this._hasUserOrRolePermission(userId, ctx.permission)) return true
+        return false
+      } else {
+        // User is not owner: must have BOTH base and .others permission
+        if (
+          (await this._hasUserOrRolePermission(userId, ctx.permission)) &&
+          (await this._hasUserOrRolePermission(userId, `${ctx.permission}.others`))
+        ) {
+          return true
+        }
+        return false
+      }
+    }
+
+    // 4. User direct permission (wildcards supported)
     const userPerm = await this._findUserPermission(userId, ctx.permission)
     if (userPerm !== undefined) return userPerm
 
-    // 4. Role-based permission (wildcards supported)
+    // 5. Role-based permission (wildcards supported)
     const rolePerm = await this._findRolePermission(userId, ctx.permission)
     if (rolePerm !== undefined) return rolePerm
 
-    // 5. Ownership: only if user is owner and has base permission (never .others)
-    if (ctx.resourceType && ctx.resourceId !== undefined && ctx.ownerId && ctx.ownerId === userId) {
-      // Only check base permission (never .others)
-      const hasBase = await this._findUserPermission(userId, ctx.permission)
-      if (hasBase !== undefined) return hasBase
-      const hasRoleBase = await this._findRolePermission(userId, ctx.permission)
-      if (hasRoleBase !== undefined) return hasRoleBase
-      // If no permission, deny
-      return false
-    }
-
-    // 6. .others: only if not owner, and .others permission is granted
-    if (ctx.resourceType && ctx.resourceId !== undefined && (!ctx.ownerId || ctx.ownerId !== userId)) {
-      const othersPerm = `${ctx.permission}.others` as Permission
-      const userOthers = await this._findUserPermission(userId, othersPerm)
-      if (userOthers !== undefined) return userOthers
-      const roleOthers = await this._findRolePermission(userId, othersPerm)
-      if (roleOthers !== undefined) return roleOthers
-    }
-
-    // 7. Default deny
+    // 6. Default deny
     return false
   }
 
@@ -140,7 +138,50 @@ export class PermissionService {
       }
     }
 
-    // 3. User direct permission (wildcards supported)
+    // 3. Ownership Check (if resource has owner)
+    if (ctx.resourceType && ctx.resourceId !== undefined && ctx.ownerId) {
+      if (ctx.ownerId === userId) {
+        // User is owner: only check base permission (never .others)
+        if (await this._hasUserOrRolePermission(userId, ctx.permission)) {
+          return {
+            allowed: true,
+            reason: `User is owner and has base permission '${ctx.permission}'`,
+          }
+        }
+        return {
+          allowed: false,
+          reason: `User is owner but lacks base permission '${ctx.permission}'`,
+        }
+      } else {
+        // User is not owner: must have BOTH base and .others permission
+        const hasBase = await this._hasUserOrRolePermission(userId, ctx.permission)
+        const hasOthers = await this._hasUserOrRolePermission(userId, `${ctx.permission}.others`)
+        if (hasBase && hasOthers) {
+          return {
+            allowed: true,
+            reason: `User is not owner but has both base ('${ctx.permission}') and .others ('${ctx.permission}.others') permissions`,
+          }
+        }
+        if (!hasBase && !hasOthers) {
+          return {
+            allowed: false,
+            reason: `User is not owner and lacks both base ('${ctx.permission}') and .others ('${ctx.permission}.others') permissions`,
+          }
+        }
+        if (!hasBase) {
+          return {
+            allowed: false,
+            reason: `User is not owner and lacks base permission '${ctx.permission}'`,
+          }
+        }
+        return {
+          allowed: false,
+          reason: `User is not owner and lacks .others permission '${ctx.permission}.others'`,
+        }
+      }
+    }
+
+    // 4. User direct permission (wildcards supported)
     const userPerm = await this._findUserPermission(userId, ctx.permission)
     if (userPerm !== undefined) {
       return {
@@ -149,7 +190,7 @@ export class PermissionService {
       }
     }
 
-    // 4. Role-based permission (wildcards supported)
+    // 5. Role-based permission (wildcards supported)
     const rolePerm = await this._findRolePermission(userId, ctx.permission)
     if (rolePerm !== undefined) {
       return {
@@ -158,48 +199,7 @@ export class PermissionService {
       }
     }
 
-    // 5. Ownership: only if user is owner and has base permission (never .others)
-    if (ctx.resourceType && ctx.resourceId !== undefined && ctx.ownerId && ctx.ownerId === userId) {
-      const hasBase = await this._findUserPermission(userId, ctx.permission)
-      if (hasBase !== undefined) {
-        return {
-          allowed: hasBase,
-          reason: `User is owner and direct user permission${hasBase ? ' grants' : ' denies'} '${ctx.permission}'`,
-        }
-      }
-      const hasRoleBase = await this._findRolePermission(userId, ctx.permission)
-      if (hasRoleBase !== undefined) {
-        return {
-          allowed: hasRoleBase,
-          reason: `User is owner and role-based permission${hasRoleBase ? ' grants' : ' denies'} '${ctx.permission}'`,
-        }
-      }
-      return {
-        allowed: false,
-        reason: 'User is owner but has no base permission',
-      }
-    }
-
-    // 6. .others: only if not owner, and .others permission is granted
-    if (ctx.resourceType && ctx.resourceId !== undefined && (!ctx.ownerId || ctx.ownerId !== userId)) {
-      const othersPerm = `${ctx.permission}.others` as Permission
-      const userOthers = await this._findUserPermission(userId, othersPerm)
-      if (userOthers !== undefined) {
-        return {
-          allowed: userOthers,
-          reason: `Direct user permission${userOthers ? ' grants' : ' denies'} '${othersPerm}' (.others)`,
-        }
-      }
-      const roleOthers = await this._findRolePermission(userId, othersPerm)
-      if (roleOthers !== undefined) {
-        return {
-          allowed: roleOthers,
-          reason: `Role-based permission${roleOthers ? ' grants' : ' denies'} '${othersPerm}' (.others)`,
-        }
-      }
-    }
-
-    // 7. Default deny
+    // 6. Default deny
     return {
       allowed: false,
       reason: 'No matching permission found, default deny',
