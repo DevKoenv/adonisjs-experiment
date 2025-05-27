@@ -7,7 +7,7 @@ type ResourceType = string
 type ResourceId = string | number
 
 interface PermissionContext {
-  user?: User | { id: string }
+  user?: User
   permission?: Permission
   resourceType?: ResourceType
   resourceId?: ResourceId
@@ -21,8 +21,23 @@ export interface PermissionDebugResult {
 }
 
 /**
- * PermissionService: strict zero-based, ACL-first, user/role/ownership, wildcards, root *.
- * See docs/permission-system.md for rules.
+ * Evaluates whether the current user has the requested permission in the current context.
+ *
+ * @remarks
+ * Follows the strict evaluation order: root, ACL, ownership, user, role, default deny.
+ *
+ * @example
+ * ```typescript
+ * const allowed = await PermissionService.builder()
+ *   .user(user)
+ *   .permission('document.edit')
+ *   .resource('document', 'resource-uuid')
+ *   .owner('user-uuid')
+ *   .check();
+ * ```
+ *
+ * @returns {Promise<boolean>} True if allowed, false otherwise.
+ * @author DevKoenv
  */
 export class PermissionService {
   private ctx: PermissionContext = {}
@@ -31,7 +46,7 @@ export class PermissionService {
     return new PermissionService()
   }
 
-  user(user: User | { id: string }): this {
+  user(user: User): this {
     this.ctx.user = user
     return this
   }
