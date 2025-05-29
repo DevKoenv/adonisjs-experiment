@@ -9,7 +9,6 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import { PermissionService } from '#services/permission_service'
 const RegisteredUserController = () => import('#controllers/Auth/registered_user_controller')
 const AuthenticatedSessionController = () => import('#controllers/Auth/authenticated_session_controller')
 

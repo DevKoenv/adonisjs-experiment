@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
+import Role from '#models/role'
 import Permission from '#models/permission'
 
 export default class AccessControlEntry extends BaseModel {
@@ -9,6 +10,12 @@ export default class AccessControlEntry extends BaseModel {
 
   @column({ isPrimary: true })
   declare id: string // UUID
+
+  @column()
+  declare grantedById: string | null
+
+  @belongsTo(() => User)
+  declare grantedBy: BelongsTo<typeof User> | null
 
   @column()
   declare resourceType: string
@@ -21,6 +28,12 @@ export default class AccessControlEntry extends BaseModel {
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
+
+  @column()
+  declare roleId: string
+
+  @belongsTo(() => Role)
+  declare roles: BelongsTo<typeof Role>
 
   @column()
   declare permissionId: string

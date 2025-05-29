@@ -6,6 +6,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { BaseModel, column, beforeCreate, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
+import Permission from '#models/permission'
 import AccessControlEntry from '#models/access_control_entries'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -39,6 +40,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
     },
   })
   declare roles: ManyToMany<typeof Role>
+
+  @manyToMany(() => Permission, {
+    pivotTable: 'user_permissions',
+    pivotColumns: ['value'],
+  })
+  declare permissions: ManyToMany<typeof Permission>
 
   @hasMany(() => AccessControlEntry)
   declare accessControlEntries: HasMany<typeof AccessControlEntry>

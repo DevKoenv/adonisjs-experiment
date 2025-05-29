@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto'
 import { DateTime } from 'luxon'
-import { BaseModel, column, beforeCreate, manyToMany } from '@adonisjs/lucid/orm'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, beforeCreate, manyToMany, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import Permission from '#models/permission'
+import AccessControlEntry from '#models/access_control_entries'
 
 export default class Role extends BaseModel {
   static selfAssignPrimaryKey = true
@@ -34,6 +35,9 @@ export default class Role extends BaseModel {
     pivotColumns: ['value'],
   })
   declare permissions: ManyToMany<typeof Permission>
+
+  @hasMany(() => AccessControlEntry)
+  declare accessControlEntries: HasMany<typeof AccessControlEntry>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

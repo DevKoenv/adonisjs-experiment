@@ -209,12 +209,12 @@ const data = {
   footer: [
     {
       title: 'Github Repo',
-      href: 'https://github.com/laravel/vue-starter-kit',
+      href: 'https://github.com/DevKoenv/adonisjs-experiment',
       icon: Folder,
     },
     {
       title: 'Documentation',
-      href: 'https://laravel.com/docs/starter-kits',
+      href: 'https://notes.koenv.dev/s/documentation/p/adonis-js-v6-project-template-tlY57XihO2',
       icon: BookOpen,
     },
   ],
