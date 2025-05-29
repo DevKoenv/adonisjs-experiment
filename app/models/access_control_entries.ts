@@ -4,7 +4,7 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import Permission from '#models/permission'
 
-export default class ResourcePermission extends BaseModel {
+export default class AccessControlEntry extends BaseModel {
   static selfAssignPrimaryKey = true
 
   @column({ isPrimary: true })
@@ -40,8 +40,8 @@ export default class ResourcePermission extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeCreate()
-  static assignUuid(resourcePermission: ResourcePermission) {
-    resourcePermission.id = crypto.randomUUID()
+  static assignUuid(accessControlEntry: AccessControlEntry) {
+    accessControlEntry.id = crypto.randomUUID()
   }
 
   /**
@@ -82,7 +82,7 @@ export default class ResourcePermission extends BaseModel {
     permissionId: string,
     resourceType: string,
     resourceId: string,
-  ): Promise<ResourcePermission | null> {
+  ): Promise<AccessControlEntry | null> {
     return await this.findBy({
       user_id: userId,
       permission_id: permissionId,

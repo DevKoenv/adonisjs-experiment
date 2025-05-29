@@ -1,7 +1,7 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'resource_permissions'
+  protected tableName = 'access_control_entries'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {

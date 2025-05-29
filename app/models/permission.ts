@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { BaseModel, column, manyToMany, hasMany, beforeCreate } from '@adonisjs/lucid/orm'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
-import ResourcePermission from '#models/resource_permission'
+import AccessControlEntry from '#models/access_control_entries'
 import type { Permission as PermissionType } from '#constants/permissions'
 
 export default class Permission extends BaseModel {
@@ -22,8 +22,8 @@ export default class Permission extends BaseModel {
   })
   declare roles: ManyToMany<typeof Role>
 
-  @hasMany(() => ResourcePermission)
-  declare resourcePermissions: HasMany<typeof ResourcePermission>
+  @hasMany(() => AccessControlEntry)
+  declare accessControlEntries: HasMany<typeof AccessControlEntry>
 
   @beforeCreate()
   static assignUuid(permission: Permission) {

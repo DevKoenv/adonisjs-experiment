@@ -6,7 +6,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { BaseModel, column, beforeCreate, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
-import ResourcePermission from '#models/resource_permission'
+import AccessControlEntry from '#models/access_control_entries'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -40,8 +40,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare roles: ManyToMany<typeof Role>
 
-  @hasMany(() => ResourcePermission)
-  declare resourcePermissions: HasMany<typeof ResourcePermission>
+  @hasMany(() => AccessControlEntry)
+  declare accessControlEntries: HasMany<typeof AccessControlEntry>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

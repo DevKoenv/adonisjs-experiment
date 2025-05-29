@@ -2,23 +2,9 @@ export const PERMISSIONS = [
   // Wildcard permission
   '*',
 
-  // Post permissions
-  'post.view',
-  'post.create',
-  'post.update',
-  'post.delete',
-
-  // Comment permissions
-  'comment.view',
-  'comment.create',
-  'comment.update',
-  'comment.delete',
-  // add more as needed
-
-  'dashboard.view',
-  'document.view',
-  'document.edit',
-  'document.edit.others',
+  // Define all permissions here.
+  // See https://notes.koenv.dev/share/1959qzb7i8/p/permission-system-n0Bs9c3Lag for the permission naming conventions.
+  // All permissions here will be automatically added to the database when seeding the database.
 ] as const
 
 export type Permission = (typeof PERMISSIONS)[number]

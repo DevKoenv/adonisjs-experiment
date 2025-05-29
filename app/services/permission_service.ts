@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { Permission } from '#constants/permissions'
 import PermissionModel from '#models/permission'
-import ResourcePermission from '#models/resource_permission'
+import AccessControlEntry from '#models/access_control_entries'
 
 type ResourceType = string
 type ResourceId = string | number
@@ -79,7 +79,7 @@ export class PermissionService {
     if (ctx.resourceType && ctx.resourceId !== undefined) {
       const permissionModel = await PermissionModel.findBy('name', ctx.permission)
       if (permissionModel) {
-        const acl = await ResourcePermission.findBy({
+        const acl = await AccessControlEntry.findBy({
           user_id: userId,
           permission_id: permissionModel.id,
           resource_type: ctx.resourceType,
@@ -136,7 +136,7 @@ export class PermissionService {
     if (ctx.resourceType && ctx.resourceId !== undefined) {
       const permissionModel = await PermissionModel.findBy('name', ctx.permission)
       if (permissionModel) {
-        const acl = await ResourcePermission.findBy({
+        const acl = await AccessControlEntry.findBy({
           user_id: userId,
           permission_id: permissionModel.id,
           resource_type: ctx.resourceType,
